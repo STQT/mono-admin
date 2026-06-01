@@ -19,11 +19,6 @@ const nextConfig: NextConfig = {
   output: "standalone",
   basePath: basePath || undefined,
   assetPrefix: basePath || undefined,
-  // Trailing slash для basePath-root: /new/ становится «нормальной» формой,
-  // Next больше не стрипит слеш через 308, исчезает цикл nginx auto-slash
-  // 301 ↔ Next 308. URLs в проде получают вид /new/login/, /new/dashboard/
-  // — функционально идентично, просто косметика URL.
-  trailingSlash: true,
   images: {
     // Backend медиа (banners, gifts, etc.) на том же домене, что и фронт
     // в проде, но next/image требует явный allowlist по hostname.
