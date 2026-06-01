@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import * as React from "react"
 
 import { hasTokens } from "@/lib/api/tokens"
+import { stripBasePath } from "@/lib/base-path"
 import { useCurrentUser } from "@/lib/hooks/use-auth"
 
 type AuthState = "checking" | "authed" | "unauthed"
@@ -28,7 +29,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (authState === "unauthed") {
-      const next = encodeURIComponent(window.location.pathname + window.location.search)
+      // window.location.pathname включает basePath ("/new/..."); router.replace
+      // приклеит basePath сам, поэтому передаём очищенный относительный путь.
+      const relative = stripBasePath(window.location.pathname) + window.location.search
+      const next = encodeURIComponent(relative)
       router.replace(`/login?next=${next}`)
     }
   }, [authState, router])

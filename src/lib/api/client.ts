@@ -1,5 +1,7 @@
 import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios"
 
+import { stripBasePath, withBasePath } from "../base-path"
+
 import {
   clearTokens,
   getAccessToken,
@@ -7,6 +9,21 @@ import {
   setAccessToken,
   setTokens,
 } from "./tokens"
+
+/**
+ * Редирект на login после 401: учитываем basePath (например `/new`),
+ * который nginx подставляет в URL. `next` сохраняем как относительный путь
+ * без basePath — потом login-форма прокинет его через router.replace, и
+ * Next сам приклеит basePath.
+ */
+function redirectToLogin(): void {
+  if (typeof window === "undefined") return
+  const loginPath = withBasePath("/login")
+  if (window.location.pathname === loginPath) return
+  const relative = stripBasePath(window.location.pathname) + window.location.search
+  const next = encodeURIComponent(relative)
+  window.location.assign(`${loginPath}?next=${next}`)
+}
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:8010"
@@ -60,10 +77,7 @@ api.interceptors.response.use(
       // Не пытаемся рефрешить если это уже был ретрай или не 401.
       if (status === 401 && original?._retry) {
         clearTokens()
-        if (typeof window !== "undefined" && window.location.pathname !== "/login") {
-          const next = encodeURIComponent(window.location.pathname + window.location.search)
-          window.location.assign(`/login?next=${next}`)
-        }
+        redirectToLogin()
       }
       throw error
     }
@@ -87,10 +101,7 @@ api.interceptors.response.use(
     } catch (refreshError) {
       refreshInFlight = null
       clearTokens()
-      if (typeof window !== "undefined" && window.location.pathname !== "/login") {
-        const next = encodeURIComponent(window.location.pathname + window.location.search)
-        window.location.assign(`/login?next=${next}`)
-      }
+      redirectToLogin()
       throw refreshError
     }
   }

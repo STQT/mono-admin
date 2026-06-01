@@ -42,7 +42,7 @@ export function LoginForm() {
       onSuccess: () => {
         toast.success("Xush kelibsiz")
         const next = searchParams.get("next")
-        router.replace(next && next.startsWith("/") ? next : "/contact-settings")
+        router.replace(next && next.startsWith("/") ? next : "/dashboard")
       },
       onError: (error: unknown) => {
         const err = error as { response?: { data?: { detail?: string } }; message?: string }

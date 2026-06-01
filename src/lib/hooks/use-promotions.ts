@@ -1,0 +1,75 @@
+"use client"
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+
+import {
+  createPromotion,
+  deletePromotion,
+  listPromotions,
+  updatePromotion,
+  type PromotionInput,
+} from "@/lib/api/promotions"
+
+export const promotionsKey = ["promotions"] as const
+
+export function usePromotions() {
+  return useQuery({
+    queryKey: promotionsKey,
+    queryFn: listPromotions,
+  })
+}
+
+export function useCreatePromotion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (input: PromotionInput) => createPromotion(input),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: promotionsKey })
+      toast.success("Aksiya qo'shildi")
+    },
+    onError: (error: unknown) => {
+      toast.error(extractError(error, "Saqlashda xatolik"))
+    },
+  })
+}
+
+export function useUpdatePromotion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, input }: { id: number; input: PromotionInput }) =>
+      updatePromotion(id, input),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: promotionsKey })
+      toast.success("Aksiya yangilandi")
+    },
+    onError: (error: unknown) => {
+      toast.error(extractError(error, "Yangilashda xatolik"))
+    },
+  })
+}
+
+export function useDeletePromotion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => deletePromotion(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: promotionsKey })
+      toast.success("O'chirildi")
+    },
+    onError: (error: unknown) => {
+      toast.error(extractError(error, "O'chirishda xatolik"))
+    },
+  })
+}
+
+function extractError(error: unknown, fallback: string): string {
+  const err = error as { response?: { data?: Record<string, unknown> }; message?: string }
+  const data = err.response?.data
+  if (!data) return err.message ?? fallback
+  if (typeof data === "string") return data
+  if (typeof data.detail === "string") return data.detail
+  const firstField = Object.values(data)[0]
+  if (Array.isArray(firstField) && typeof firstField[0] === "string") return firstField[0]
+  return fallback
+}

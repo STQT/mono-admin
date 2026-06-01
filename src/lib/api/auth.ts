@@ -1,6 +1,17 @@
 import { api } from "./client"
 import { clearTokens, setTokens, type TokenPair } from "./tokens"
 
+export const ADMIN_PERMISSIONS = [
+  "core.send_region_messages",
+  "core.generate_qrcodes",
+  "core.view_qrcode_detail",
+  "core.change_status_call_center",
+  "core.change_status_agent",
+  "core.change_user_type_call_center",
+] as const
+
+export type AdminPermission = (typeof ADMIN_PERMISSIONS)[number]
+
 export type AdminUser = {
   id: number
   username: string
@@ -9,6 +20,7 @@ export type AdminUser = {
   last_name: string
   is_staff: boolean
   is_superuser: boolean
+  permissions: AdminPermission[]
 }
 
 export async function login(username: string, password: string): Promise<TokenPair> {

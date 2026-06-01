@@ -1,0 +1,31 @@
+# Snippet для подключения mona-admin в существующий docker-compose.prod.yml
+# (например, рядом с web/celery в mona/docker-compose.prod.yml).
+# Контейнер слушает 3000, наружу мапится 5990 — nginx проксирует
+# https://aksiya.monoelectric.uz/new/* → :5990.
+
+services:
+  mona-admin:
+    build:
+      context: ./mona-admin             # путь относительно compose-файла
+      dockerfile: Dockerfile
+      args:
+        # Адрес backend. Если backend и frontend на одном домене (а так и
+        # есть — оба за aksiya.monoelectric.uz), можно оставить как есть.
+        NEXT_PUBLIC_API_BASE_URL: ${MONA_ADMIN_API_BASE_URL:-https://aksiya.monoelectric.uz}
+        # Sub-path под которым admin доступен. Любое изменение требует
+        # пересборки image (build-time inline).
+        NEXT_PUBLIC_BASE_PATH: ${MONA_ADMIN_BASE_PATH:-/new}
+    image: mona-admin:latest
+    container_name: mona-admin
+    restart: unless-stopped
+    ports:
+      - "5990:3000"                      # хост:контейнер
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/new/login"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

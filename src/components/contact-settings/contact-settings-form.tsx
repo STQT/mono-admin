@@ -81,7 +81,11 @@ export function ContactSettingsForm({ initial, onDone }: Props) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Kontakt turi</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                items={Object.fromEntries(CONTACT_TYPES.map((t) => [t.value, t.label]))}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue />

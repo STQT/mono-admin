@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -45,15 +46,22 @@ export function UserMenu() {
         }
       />
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="flex flex-col">
-          <span className="font-medium">{user.first_name || user.username}</span>
-          <span className="text-muted-foreground text-xs">{user.email || `@${user.username}`}</span>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem disabled>
-          <User className="mr-2 size-4" />
-          {user.is_superuser ? "Superuser" : "Staff"}
-        </DropdownMenuItem>
+        {/* base-ui: GroupLabel должен жить внутри Menu.Group, иначе бросает
+            "MenuGroupContext is missing". Оборачиваем шапку и информацию о
+            роли в одну группу. */}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex flex-col">
+            <span className="font-medium">{user.first_name || user.username}</span>
+            <span className="text-muted-foreground text-xs">
+              {user.email || `@${user.username}`}
+            </span>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem disabled>
+            <User className="mr-2 size-4" />
+            {user.is_superuser ? "Superuser" : "Staff"}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onLogout}>
           <LogOut className="mr-2 size-4" />
