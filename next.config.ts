@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   basePath: basePath || undefined,
   assetPrefix: basePath || undefined,
+  // Без этого: Next.js 308-редиректит `/new/` (trailing slash) → `/new`, а
+  // nginx auto-301'ит `/new` → `/new/` (потому что есть location /new/).
+  // Цикл. Флаг отключает Next-овский 308; обе формы URL отрабатываются.
+  skipTrailingSlashRedirect: true,
   images: {
     // Backend медиа (banners, gifts, etc.) на том же домене, что и фронт
     // в проде, но next/image требует явный allowlist по hostname.
