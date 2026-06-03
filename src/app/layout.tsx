@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist_Mono, Inter } from "next/font/google"
+import { Geist, Geist_Mono } from "next/font/google"
 
 import { QueryProvider } from "@/components/providers/query-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
@@ -7,9 +7,9 @@ import { Toaster } from "@/components/ui/sonner"
 
 import "./globals.css"
 
-const inter = Inter({
+const geistSans = Geist({
   variable: "--font-sans",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
 })
 
 const geistMono = Geist_Mono({
@@ -31,7 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground min-h-full">
         <ThemeProvider>

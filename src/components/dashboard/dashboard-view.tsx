@@ -71,7 +71,7 @@ export function DashboardView() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Bosh sahifa</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight">Boshqaruv paneli</h1>
           <p className="text-muted-foreground text-sm">
             Loyaliti dasturi bo&apos;yicha umumiy ko&apos;rsatkichlar.{" "}
             {isFetching && <span>· yangilanmoqda…</span>}
@@ -95,7 +95,7 @@ export function DashboardView() {
             label="Foydalanuvchilar"
             value={fmt(data?.users_total)}
             trend={data?.trends.users_total ?? null}
-            icon={<Users className="text-muted-foreground size-4" />}
+            icon={<Users className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.users_electrician)} · 🛒 {fmt(data?.users_seller)}
@@ -107,7 +107,7 @@ export function DashboardView() {
           <KpiCard
             label="Skanerlangan promokodlar"
             value={fmt((data?.qr_e_scanned ?? 0) + (data?.qr_s_scanned ?? 0))}
-            icon={<ScanLine className="text-muted-foreground size-4" />}
+            icon={<ScanLine className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.qr_e_scanned)} · 🛒 {fmt(data?.qr_s_scanned)}
@@ -119,7 +119,7 @@ export function DashboardView() {
             label="Berilgan ballar"
             value={fmt(data?.points_total)}
             trend={data?.trends.points_total ?? null}
-            icon={<Coins className="text-muted-foreground size-4" />}
+            icon={<Coins className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.points_electrician)} · 🛒 {fmt(data?.points_seller)}
@@ -130,7 +130,7 @@ export function DashboardView() {
           <KpiCard
             label="Sovg'a so'rovlari"
             value={fmt(data?.gifts_total)}
-            icon={<ShoppingBag className="text-muted-foreground size-4" />}
+            icon={<ShoppingBag className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.gifts_electrician)} · 🛒 {fmt(data?.gifts_seller)}
@@ -195,7 +195,7 @@ export function DashboardView() {
           <KpiCard
             label="Jami foydalanuvchilar"
             value={fmt(data?.life_u_total)}
-            icon={<Users className="text-muted-foreground size-4" />}
+            icon={<Users className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.life_u_e)} · 🛒 {fmt(data?.life_u_s)}
@@ -209,7 +209,7 @@ export function DashboardView() {
           <KpiCard
             label="Jami skanerlangan ⚡"
             value={fmt(data?.life_qr_e_scanned)}
-            icon={<QrCode className="text-muted-foreground size-4" />}
+            icon={<QrCode className="size-4" />}
             hint={
               <span>
                 {fmt(data?.life_qr_e_total)} dan ·{" "}
@@ -221,7 +221,7 @@ export function DashboardView() {
           <KpiCard
             label="Jami skanerlangan 🛒"
             value={fmt(data?.life_qr_s_scanned)}
-            icon={<QrCode className="text-muted-foreground size-4" />}
+            icon={<QrCode className="size-4" />}
             hint={
               <span>
                 {fmt(data?.life_qr_s_total)} dan ·{" "}
@@ -233,7 +233,7 @@ export function DashboardView() {
           <KpiCard
             label="Jami sovg'a so'rovlari"
             value={fmt(data?.life_gifts_total)}
-            icon={<Gift className="text-muted-foreground size-4" />}
+            icon={<Gift className="size-4" />}
             hint={
               <span>
                 ⚡ {fmt(data?.life_gifts_e)} · 🛒 {fmt(data?.life_gifts_s)}

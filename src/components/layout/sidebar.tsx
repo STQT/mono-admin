@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Fragment } from "react"
 
 import { NAV_ITEMS } from "@/components/layout/nav-items"
 import { usePermissions } from "@/lib/hooks/use-auth"
@@ -24,43 +25,50 @@ export function Sidebar() {
   })
 
   return (
-    <aside className="bg-sidebar text-sidebar-foreground hidden w-60 shrink-0 flex-col shadow-[4px_0_24px_rgba(0,0,0,0.18)] md:flex">
-      {/* Brand header — градиент blue→cyan, как в JIP brand-link */}
+    <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden w-[248px] shrink-0 flex-col border-r md:flex">
+      {/* Brand — лого-квадрат + название/подпись (как в JIP sidebar-brand) */}
       <Link
         href="/"
-        className="flex h-16 items-center justify-center bg-gradient-to-br from-[#1d4ed8] to-[#06b6d4] text-xl font-bold tracking-[0.15em] text-white"
+        className="border-sidebar-border flex min-h-16 items-center gap-2.5 border-b px-4 py-[18px]"
       >
-        MONA
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#6366f1] to-[#4338ca] text-[13px] font-extrabold tracking-tight text-white">
+          M
+        </span>
+        <span className="flex min-w-0 flex-col">
+          <span className="text-foreground truncate text-sm font-bold tracking-tight">
+            Mona Admin
+          </span>
+          <span className="text-muted-foreground truncate text-[11px]">Mono Electric</span>
+        </span>
       </Link>
 
-      <nav className="flex flex-col gap-0.5 px-2 py-3">
-        <p className="px-3 pt-2 pb-1 text-[10px] font-bold tracking-[0.15em] text-slate-500 uppercase">
-          Boshqaruv
-        </p>
+      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-3">
         {items.map((item) => {
           const active = pathname.startsWith(item.href)
           const Icon = item.icon
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "group relative flex items-center gap-2.5 overflow-hidden rounded-lg px-3.5 py-2.5 text-[13.5px] font-medium transition-all duration-200",
-                active
-                  ? "bg-gradient-to-r from-[#1d4ed8] to-[#2563eb] text-white shadow-[0_4px_12px_rgba(37,99,235,0.35)]"
-                  : "text-slate-400 hover:translate-x-1 hover:bg-[#1e293b] hover:text-white"
+            <Fragment key={item.href}>
+              {item.section && (
+                <p className="px-3 pt-3 pb-1 text-[11px] font-semibold tracking-[0.06em] text-[var(--jip-text-dim)] uppercase">
+                  {item.section}
+                </p>
               )}
-            >
-              {/* Cyan accent bar слева — виден при active/hover */}
-              <span
+              <Link
+                href={item.href}
                 className={cn(
-                  "absolute top-0 bottom-0 left-0 w-[3px] origin-center rounded-r bg-[#06b6d4] transition-transform duration-200",
-                  active ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
+                  "relative flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] transition-colors",
+                  active
+                    ? "bg-sidebar-accent text-sidebar-primary font-medium"
+                    : "hover:bg-accent hover:text-foreground"
                 )}
-              />
-              <Icon className="size-4 shrink-0" />
-              <span className="truncate">{item.label}</span>
-            </Link>
+              >
+                {active && (
+                  <span className="bg-sidebar-primary absolute top-1/2 -left-2 h-[18px] w-[3px] -translate-y-1/2 rounded-r" />
+                )}
+                <Icon className="size-4 shrink-0" />
+                <span className="flex-1 truncate">{item.label}</span>
+              </Link>
+            </Fragment>
           )
         })}
       </nav>
