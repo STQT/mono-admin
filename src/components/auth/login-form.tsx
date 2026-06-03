@@ -52,10 +52,14 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Mona Admin</CardTitle>
-        <CardDescription>Staff login orqali kiring</CardDescription>
+    <Card className="w-full max-w-sm border-white/10 bg-[#1e293b]/95 shadow-[0_24px_64px_rgba(0,0,0,0.4)] backdrop-blur-xl hover:translate-y-0">
+      <CardHeader className="space-y-1 text-center">
+        <CardTitle className="bg-gradient-to-r from-[#3b82f6] to-[#06b6d4] bg-clip-text text-3xl font-extrabold tracking-[0.15em] text-transparent">
+          MONA
+        </CardTitle>
+        <CardDescription className="text-slate-400">
+          Boshqaruv paneliga kiring
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -86,7 +90,11 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={login.isPending} className="w-full">
+            <Button
+              type="submit"
+              disabled={login.isPending}
+              className="h-11 w-full from-[#2563eb] to-[#06b6d4] text-[15px] font-semibold shadow-[0_8px_24px_rgba(37,99,235,0.4)] hover:from-[#1d4ed8] hover:to-[#0891b2]"
+            >
               {login.isPending ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
