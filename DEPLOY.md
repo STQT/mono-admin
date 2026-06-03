@@ -96,14 +96,29 @@ curl -sI https://aksiya.monoelectric.uz/new/login   # через nginx
 ```bash
 cd /opt/mona-admin
 git pull
+git log --oneline -1   # убедиться, что pull дотянул новый коммит
 docker build \
     --build-arg NEXT_PUBLIC_API_BASE_URL=https://aksiya.monoelectric.uz \
     --build-arg NEXT_PUBLIC_BASE_PATH=/new \
     -t mona-admin:latest .
-docker restart mona-admin
+# ВАЖНО: пересоздать контейнер, а НЕ `docker restart` —
+# restart перезапускает старый контейнер на СТАРОМ образе и новый билд не применяется.
+docker stop mona-admin && docker rm mona-admin
+docker run -d --restart unless-stopped \
+    --name mona-admin \
+    -p 5990:3000 \
+    mona-admin:latest
 ```
 
-`--build` обязателен — `NEXT_PUBLIC_*` инлайнятся при сборке.
+Если используется compose (Вариант B):
+
+```bash
+cd /opt/mona
+docker compose -f docker-compose.prod.yml up -d --build --force-recreate mona-admin
+```
+
+`--build` обязателен — `NEXT_PUBLIC_*` инлайнятся при сборке. `docker restart`
+НЕ применяет новый образ — нужен `stop && rm && run` (или `up --force-recreate`).
 
 ## Точки внимания
 
