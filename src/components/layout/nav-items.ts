@@ -9,6 +9,7 @@ import {
   Shield,
   ShoppingBag,
   Sparkles,
+  Sparkle,
   Users,
   UserCog,
   Video,
@@ -65,4 +66,5 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/contact-settings", label: "Admin kontaktlar", icon: Contact, section: "Tizim" },
   { href: "/admin-users", label: "Admin foydalanuvchilar", icon: UserCog, superuserOnly: true },
   { href: "/admin-groups", label: "Guruhlar va huquqlar", icon: Shield, superuserOnly: true },
+  { href: "/ai", label: "AI Yordamchi", icon: Sparkle, section: "Sun'iy intellekt", superuserOnly: true },
 ]
